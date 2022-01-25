@@ -1,0 +1,9 @@
+**/*.html
+**/*.txt
+**/*.md
+**/*.svg
+**/*.ttf
+**/*.woff
+**/*.eot
+app/images/*
+package.json

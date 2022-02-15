@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import React from 'react'
 import Home from './pages/home'
 
-function App() {
-  return <Home></Home>
-  
+const App: React.FC<any> = ({}) => {
+  return <Home />
 }
 
 export default App

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useReducer, useState, useRef } from 'react'
 import { isEmpty } from 'lodash'
+import { Form, Button, Input } from 'antd'
 import moment from 'moment'
 import {
   Provider as DataProvider,
@@ -14,13 +15,17 @@ interface HeadeProps {
 }
 
 const Heade: React.FC<HeadeProps> = ({ dataStrateList }) => {
+  const [form]: any = Form.useForm()
   const [dataReducer, dataReducerdispath] = useReducer(DataReducer, initData)
   const arr: Array<number> = []
   const inputRef = useRef(null)
   console.log(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'))
+  console.log(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'))
   const [state, setState] = useState({ a: 'aaaa' })
   console.log(state)
-
+  useEffect(() => {
+    form.setFieldsValue({ username: 'Username', password: 'Password' })
+  })
   // Object.assign(dataStrateList, { data: 'ppppp', ppp: 'p??1111?' })
   const JsonValue = (data: any) => {
     const result = data
@@ -40,6 +45,9 @@ const Heade: React.FC<HeadeProps> = ({ dataStrateList }) => {
     setState({ a: 'bbbbb' })
     console.log(state)
   }
+  const onFinish = (values: any) => {
+    console.log(values)
+  }
   return (
     <>
       heade
@@ -51,6 +59,42 @@ const Heade: React.FC<HeadeProps> = ({ dataStrateList }) => {
         <button onClick={handlerFocus}>获取input焦点</button>
         <button onClick={handlerClick}>点击</button>
       </div>
+      <Form
+        form={form}
+        name="basic"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        onFinish={onFinish}
+        // onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: 'Please input your password!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+          {/* <Checkbox>Remember me</Checkbox> */}
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      <Button onClick={onFinish}>提交</Button>
       <Content headeRef={inputRef} list={dataReducer} />
     </>
   )

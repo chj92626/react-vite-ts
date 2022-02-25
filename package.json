@@ -19,7 +19,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6.2.1",
-    "require": "npm:Require@^1.1.2"
+    "require": "npm:Require@^1.1.2",
+    "sql-formatter": "^2.3.3"
   },
   "devDependencies": {
     "@types/loadable__component": "^5.13.4",
@@ -28,6 +29,7 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@types/react-router-config": "^5.0.6",
+    "@types/sql-formatter": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "@vitejs/plugin-react": "^1.0.7",

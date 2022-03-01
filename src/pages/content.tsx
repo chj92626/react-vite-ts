@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { isEmpty } from 'lodash'
-import moment from 'moment'
+import { isEmpty, ceil, floor } from 'lodash'
+import moment, { min } from 'moment'
 import { Provider as DataProvider, Context as DatainitData } from '../context/context'
-import { Input } from 'antd'
+import { Input, Tooltip } from 'antd'
 
 import sqlFormatter from 'sql-formatter'
-
+import ReeactEcharts from 'echarts-for-react'
 interface ContentProps {
   list: any
   headeRef: any
@@ -14,6 +14,59 @@ const { TextArea } = Input
 const Content: React.FC<ContentProps> = ({ list, headeRef }) => {
   const { state: dataStrate, dispath: dispathdata } = useContext(DatainitData)
   // const [inData] = useState('bbbbb')
+  const [option, setOption] = useState({})
+  useEffect(() => {
+    const seriesData = [3, 23, 33, 55, 46, 17]
+    /** 最大值处理 */
+    const maxValue = (value: any) => {
+      return ceil(Math.ceil(Math.max(...value) * 1.1), -1)
+    }
+    /** 最小值处理 */
+    const minValue = (value: any) => {
+      let result = 0
+      result = floor(Math.floor(Math.min(...value) * 0.9), -1)
+      return result
+    }
+
+    const options = {
+      title: {
+        show: true /** 标题显示 */,
+        text: '业务统计报表' + '\n' /** 主标题 */,
+        subtext: '数据新增+1' /** 副标题 */,
+        padding: [0, 0, 20, 0],
+        x: 'center',
+        textAlign: 'center'
+      },
+      xAxis: {
+        type: 'category',
+        data: [1, 2, 3, 4, 5, 6],
+        axisLine: { lineStyle: { color: '#a9a9a9' } } /** 坐标轴线*/,
+        splitLine: { show: false } /** 网格线 */
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: { show: true, lineStyle: { color: '#a9a9a9' } } /** 坐标轴线*/,
+        splitLine: { show: false } /** 网格线 */,
+        max: maxValue(seriesData),
+        min: minValue(seriesData),
+        splitNumber: 1
+      },
+      series: {
+        data: seriesData,
+        type: 'line',
+        lineStyle: { width: 1 },
+        itemStyle: {
+          /** 数据点样式 */
+          borderWidth: 1 /** 数据点大小 */,
+          opacity: 0.5 /** 数据点透明度 0为不显示 */
+        },
+        color: '#0f9fff'
+      },
+      Tooltip: { trigger: 'item' },
+      legend: { orient: 'vertical', right: 'right' }
+    }
+    setOption(options)
+  })
   const partyId = 12333333333
   const dta = `select p.id pId, p.cds_num pCdsNum, p.cif_num pCifNum, b2.clentCif,p.name, b2.clentName, a1.prjCode
   from (
@@ -73,7 +126,7 @@ const Content: React.FC<ContentProps> = ({ list, headeRef }) => {
                    and counter_party_id in ${partyId}
                  group by counter_party_id
   `
-  const sqlvalue = sqlFormatter.format(dta)
+  const sqlvalue = sqlFormatter.format(dta).replace(/\$ /, '$')
   // console.log(sqlvalue)
   const oldValue = 'SELECT * FROM users'
   // const sqlvalue = sqlFormatter.format(oldValue)
@@ -100,6 +153,8 @@ const Content: React.FC<ContentProps> = ({ list, headeRef }) => {
       {list.data}
       <button onClick={headerRef}>获取父级ref</button>
       <TextArea rows={10} value={sqlvalue}></TextArea>
+      <div style={{ marginBottom: '200px' }}></div>
+      <ReeactEcharts option={option} />
     </>
   )
 }
